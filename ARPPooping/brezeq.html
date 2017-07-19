@@ -11,16 +11,24 @@
 			font-size: 14px;
 		}
 		div{
-			border-color: #001199;
+			border-color: #00bbff;
 			border-width: 5px;
 			border-radius: 20px;
 			border-style: solid;
 			padding: 10px;
 			background-color: #ffffff;
 		}
+		div.title{
+			background-color: #001199;
+			color: #ffffff;
+			font-size: 18px;
+		}
 		p{
 			color: #001199;
 			font-size: 16px;
+		}
+		td{
+			padding: 5px;
 		}
 	</style>
 	<script type="text/javascript">
@@ -42,16 +50,26 @@
 	</script>
 </head>
 <body onload="hideDivs();">
-		<p>
-		<b>לקוח יקר</b>,<br />
-		קיימת תקלה במתן השירות עבור מחשב זה.
-		</p>
+		<div class="title">
+		<table>
+			<tr>
+				<td width="80px"><img src="imgs/mark.png" width="70px" height="70px" /></td>
+				<td>
+					<b>לקוח יקר</b>,<br />
+					קיימת תקלה במתן השירות עבור מחשב זה.
+				</td>
+			</tr>
+		</table>
+		</div>
 		<p>
 		באפשרותך להשתמש בשירותינו החדש <b>איתור תקלות רשת</b>.
 		</p>
 		<input type="button" name="opendiv" value="לחץ כאן לאיתור התקלה" onclick="chdiv('wait','block'); waitscam();" />
 
-		<div id="wait">אנא המתן...</div>
+		<div id="wait">
+			אנא המתן...<br/>
+			<img src="imgs/loading.gif" width="20%" height="20%" />
+		</div>
 		<div id="solution">
 		התגלתה תקלה אפשרית בחיבור ליאנטרנט. <br/>
 		להלן מספר צעדים אפשריים לפתרון התקלה בחיבור לרשת:
