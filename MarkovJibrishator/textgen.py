@@ -46,6 +46,6 @@ class WordJibberish(object):
 
 
 wj = WordJibberish(2)
-wj.train("rick.txt")
+wj.train("wordtrain.txt")
 
 print  wj.generate(100)
