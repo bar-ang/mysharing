@@ -6,21 +6,54 @@
 	<style type="text/css">
 		body{
 			background-color: #ddeeff;
+			font-family: sans-serif;
+			padding: 40px;
+			font-size: 14px;
+		}
+		div{
+			border-color: #001199;
+			border-width: 5px;
+			border-radius: 20px;
+			border-style: solid;
+			padding: 10px;
+			background-color: #ffffff;
+		}
+		p{
+			color: #001199;
+			font-size: 16px;
 		}
 	</style>
+	<script type="text/javascript">
+		function hideDivs(){
+			document.getElementById("solution").style.display  = "none";
+			document.getElementById("wait").style.display  = "none";
+		}
+		function chdiv(id, state){
+			document.getElementById(id).style.display  = state;
+		}
+		function sleep(ms) {
+ 			 return new Promise(resolve => setTimeout(resolve, ms));
+		}
+		async function waitscam(){
+			await sleep(5000);
+			chdiv('solution','block');
+			chdiv('wait','none');
+		}
+	</script>
 </head>
-<body>
+<body onload="hideDivs();">
 		<p>
-		לקוח יקר,<br />
+		<b>לקוח יקר</b>,<br />
 		קיימת תקלה במתן השירות עבור מחשב זה.
 		</p>
 		<p>
 		באפשרותך להשתמש בשירותינו החדש <b>איתור תקלות רשת</b>.
 		</p>
-		<input type="button" name="opendiv" value="לחץ כאן לאיתור התקלה" />
+		<input type="button" name="opendiv" value="לחץ כאן לאיתור התקלה" onclick="chdiv('wait','block'); waitscam();" />
 
-		<div>אנא המתן...</div>
-		<div>
+		<div id="wait">אנא המתן...</div>
+		<div id="solution">
+		התגלתה תקלה אפשרית בחיבור ליאנטרנט. <br/>
 		להלן מספר צעדים אפשריים לפתרון התקלה בחיבור לרשת:
 			<ul>
 				<li>לחץ על הכפתור win+R (הלחצן win נמצא בין המקשים ctrl ו alt במקלדת) והקלד השדה שהופיע על המסך את המילה ARP ולחץ אישור\OK.</li>
@@ -32,10 +65,13 @@
 			<input type="submit" name="submit_plea" value="שלח" />
 		</div>
 
+		<br/>
+		<br/>
 		<div>
 		אם התקלה לא נפתרה ניתן לפנות אלינו בטלפון 054-9468633 לשם קבלת תמיכה <br />
 		אנו בבזק בינלאומי מצרים על התקלה ועושים הכל כדי לוודא שלקוחותינו יהנו מאינטרנט מהיר ואיכותי ומריח טוב בשירותים <br />
 		אנו מאלחלים המשך יום נעים לכלל לקוחותינו! <br />
+		<img src="imgs/logo.png" height="20%" width="20%" />
 		</div>
 </body>
 </html>
