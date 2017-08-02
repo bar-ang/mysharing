@@ -10,12 +10,12 @@
 			padding: 40px;
 			font-size: 14px;
 		}
-		div{
+		div.box{
 			border-color: #00bbff;
 			border-width: 5px;
 			border-radius: 20px;
 			border-style: solid;
-			padding: 10px;
+			padding: 20px;
 			background-color: #ffffff;
 		}
 		div.title{
@@ -30,6 +30,29 @@
 		td{
 			padding: 5px;
 		}
+		.button {
+		    background-color: #001199;
+		    border: none;
+		    color: white;
+		    padding: 7px 16px;
+		    text-align: center;
+		    text-decoration: none;
+		    display: inline-block;
+		    font-size: 16px;
+		    margin: 4px 2px;
+		    cursor: pointer;
+		}
+		.freetext{
+			background-color:  #ddeeff;
+			font-family: sans-serif;
+		}
+		.button:hover{
+			background-color: #0033ee;
+		}
+		 #container{
+            width:800px;
+            margin:0 auto;
+        }
 	</style>
 	<script type="text/javascript">
 		function hideDivs(){
@@ -50,7 +73,8 @@
 	</script>
 </head>
 <body onload="hideDivs();">
-		<div class="title">
+	<div id="container">
+		<div class="box title">
 		<table>
 			<tr>
 				<td width="80px"><img src="imgs/mark.png" width="70px" height="70px" /></td>
@@ -62,37 +86,45 @@
 		</table>
 		</div>
 		<p>
-		באפשרותך להשתמש בשירותינו החדש <b>איתור תקלות רשת</b>.
+			<b>חדש! שירות איתור תקלות</b>
 		</p>
-		<input type="button" name="opendiv" value="לחץ כאן לאיתור התקלה" onclick="chdiv('wait','block'); waitscam();" />
+		<p>
+			<br />
+			מדוע להתאמץ כאשר אנו יכולים לאתר את התקלה עבורך?<br />
+			לשימוש בשירות כל שעליך לעשות הוא ללחוץ על הכפתור <b><i>"אתר תקלות ברשת"</i></b>
+		</p>
+		<input type="button" class="button" name="opendiv" value="אתר תקלות ברשת" onclick="chdiv('wait','block'); waitscam();" />
 
-		<div id="wait">
+		<div id="wait" class="box">
 			אנא המתן...<br/>
 			<img src="imgs/loading.gif" width="20%" height="20%" />
 		</div>
-		<div id="solution">
+		<div class="box" id="solution">
 		התגלתה תקלה אפשרית בחיבור ליאנטרנט. <br/>
-		להלן מספר צעדים אפשריים לפתרון התקלה בחיבור לרשת:
+		להלן מספר צעדים אפשריים לפתרון התקלה:
 			<ul>
-				<li>לחץ על הכפתור win+R (הלחצן win נמצא בין המקשים ctrl ו alt במקלדת) והקלד השדה שהופיע על המסך את המילה ARP ולחץ אישור\OK.</li>
+				<li>לחץ על הכפתור win+R (הלחצן win נמצא בין המקשים ctrl ו alt במקלדת) והקלד בשדה שהופיע על המסך את המילה ARP ולחץ אישור\OK.</li>
 				<li>פנה אל חדר השירותים בביתך, תחת התפריט "הורד מים" בחר באפשרות "מיכל מלא"</li>
 				<li>וודא כי ירדה כל הפסולת באסלה. חזור על הצעד הקודם על לירידת כל הפסולת.</li>
 				<li>(אופציונלי) על מנת למנוע מהתקלה לחזור על עצמה שוב רשום בתיבת הטקסט בתחתית הדף את הטקסט: <i>"הורדתי את המים. אני מבטיח להישאר תמיד על יד האסלה על להורדת כל החרא. אנא שחרר לי את האינטרנט בבקשה!"</i></li>
 			</ul>
-			<form method="get" action="/POOP">
-				<textarea cols="50" name='plea' placeholder="כתוב כאן את הצהרתך"></textarea>
+			<form method="get" action="/POOP" align="center">
+				<textarea class="freetext" cols="50" name='plea' placeholder="כתוב כאן את הצהרתך"></textarea>
 				<br/>
-				<input type="submit" name="submit_plea" value="שלח" />
+				<input type="submit" name="submit_plea" value="שלח" class="button" />
 			</form>
 		</div>
 
 		<br/>
 		<br/>
-		<div>
+		<div class="box">
 		אם התקלה לא נפתרה ניתן לפנות אלינו בטלפון 054-9468633 לשם קבלת תמיכה <br />
 		אנו בבזק בינלאומי מצרים על התקלה ועושים הכל כדי לוודא שלקוחותינו יהנו מאינטרנט מהיר ואיכותי ומריח טוב בשירותים <br />
-		אנו מאלחלים המשך יום נעים לכלל לקוחותינו! <br />
-		<img src="imgs/logo.png" height="20%" width="20%" />
+		אנו מאלחלים המשך יום נעים לכלל לקוחותינו! <br /><br />
+		<img src="imgs/logo.png" height="105px" width="300px" />
+		<br/>
+		<img src="imgs/tooki.png" align="left" />
 		</div>
+	</div>
 </body>
 </html>
