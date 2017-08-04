@@ -48,10 +48,12 @@ last_ack = 0
 
 PAGE = "brezeq.html"
 
-def openWebserver(pagetoSend=PAGE):
+HTTP = 80
+HTTPS = 443
+def openWebserver(pagetoSend=PAGE, port=HTTP):
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	try:
-		s.bind(('', 80))
+		s.bind(('', port))
 	except socket.error as msg:
 		print 'Bind failed. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
 		sys.exit()
@@ -138,13 +140,18 @@ def main(argv):
 	f = os.fork()
 
 	if f != 0:
-		openWebserver()
+		f = os.fork()
+		if f != 0:
+			openWebserver(PAGE, HTTPS)
+		#else:
+		#	openWebserver(PAGE, HTTPS)
 	else:
 		if len(argv) > 6:
 			sniff(lfilter = filterer, prn = action, timeout = int(argv[6]))
 			print "Stopped sniffing"
 		else:
 			sniff(lfilter = filterer, prn = action)
+			print "Stopped sniffing"
 
 
 
