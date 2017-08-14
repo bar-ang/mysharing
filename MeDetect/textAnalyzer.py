@@ -2,22 +2,70 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import re
 
-def create_feature_vector(text):
-	text = text.replace("@@",",")
-	s = ["!","!!","!!!","!1"
-	"?","??","???",
-	"\"",
-	"חח","חחח","חחחח",
-	".","..","...",
+EMOJI = ["👍","😪","😅","🤣","😀","😅","🤔","😜","✨","🌚",
+	"😅","😳","😶","🤔","🤣","😺","😗","😛",
+	"😬","😂"]
+
+ASCII_EMOJI = [":)",":(",":-)",":-(",";-)",";-(","=[","=]",
+	":D",":S",":X",":O"]
+
+PUNCTUATION = [".","..","...",
 	",",":",";","~","$","%","'","/","^","&"
 	"(",")",
-	"[","]",
-	":)",":(",":-)",":-(",";-)",";-(","=[","=]",
-	":D",":S",":X",":O",
-	"👍","😪","😅","🤣","😀","😅","🤔","😜","✨","🌚",
-	"😅","😳","😶","🤔","🤣","😺","😗","😛",
-	"😬","😂",
+	"[","]",]
+PUNCTUATION_STR = ".,:;~$%'/\\^&()[]\{\}?!#\""
+def  metadata(text): #TODO: problems :(
+	#text length
+	#No of lines
+	#No of words
+	#Maximum word length
+	words = len(text.split(" "))*1.0
+	p = re.search(r"""[.,?]""", text)
+	if p != None:
+		punc_marks = len(p.groups())
+	else:
+		punc_marks = 0;
+
+	v = []
+	v += [len(text)*1.0/10, 0, words, punc_marks] #TODO: replace zero with number of lines
+	words = text.split(" ")
+	maxlen = 0
+	for word in words:
+		if len(word) > maxlen:
+			maxlen = len(word)
+	v += [maxlen]
+	return v
+
+def emojiAnalysis(text, detailed = True):
+	#No of real emoji
+	#No of ascii emoji
+	#(detailed) No of each individual emoji
+	v = [0,0]
+	vd = []
+	for emo in EMOJI:
+		c = text.count(emo)
+		v[0] += c
+		vd.append(c)
+	for emo in ASCII_EMOJI:
+		c = text.count(emo)
+		v[1] += c
+		vd.append(c)
+	if detailed:
+		v += vd
+	return v
+
+
+def correctness(text):
+	return []
+
+def hebrewFeatures(text):
+	return []
+
+def contentAnalysis(text):
+	s = [
+	"חח","חחח","חחחח",
 	"אני","אתה","אנחנו","הוא","היא","הם","הן",
 	"אם","עם","נכון","כן","לא",
 	"כאילו","אבל","וגם",
@@ -31,6 +79,14 @@ def create_feature_vector(text):
 
 	return v
 
+def create_feature_vector(text):
+	text = text.replace("@@",",")
+	v = metadata(text)
+	v += emojiAnalysis(text, False)
+	v += contentAnalysis(text)
+	v += correctness(text)
+	v += hebrewFeatures(text)
+	return v
 
 def add_polynomial_features(v, deg = 2):
 	if deg < 2:
@@ -77,5 +133,6 @@ if __name__ == "__main__":
 	for entry in data:
 		entry = entry.split(",")
 		v = create_feature_vector(entry[0])
-		v = add_quadratic_features(v)
-		break
+		v = add_polynomial_features(v,1)
+		print v
+		#break

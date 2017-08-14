@@ -4,7 +4,7 @@ from sklearn.linear_model import LogisticRegression
 import textAnalyzer
 import sys
 
-def loadData(filepath, cv_frac = 0.2, test_frac = 0.2):
+def loadData(filepath, cv_frac = 0.2, test_frac = 0.2, polynomial_degree = 2):
 	X_train = []
 	X_cv = []
 	X_test =[]
@@ -26,7 +26,7 @@ def loadData(filepath, cv_frac = 0.2, test_frac = 0.2):
 	for entry in data:
 		entry = entry.split(",")
 		v = textAnalyzer.create_feature_vector(entry[0])
-		v = textAnalyzer.add_polynomial_features(v,2)
+		v = textAnalyzer.add_polynomial_features(v,polynomial_degree)
 
 		if c < train_count:
 			X_train.append(v)
@@ -63,11 +63,12 @@ def evaluateResults(lr, X_test, y_test):
 	return test_succ_precent
 
 THRESH = 0.5
+POLY_DEG = 2
 if __name__ == "__main__":
 	if len(sys.argv) > 1:
-		alldata = loadData(sys.argv[1],cv_frac = 0, test_frac = 0.2)
+		alldata = loadData(sys.argv[1],cv_frac = 0, test_frac = 0.2, polynomial_degree=POLY_DEG)
 	else:
-		alldata = loadData("data.csv", cv_frac = 0, test_frac = 0.2)
+		alldata = loadData("data.csv", cv_frac = 0, test_frac = 0.2, polynomial_degree=POLY_DEG)
 	X_train = alldata[0]
 	X_cv = alldata[2]
 	X_test = alldata[4]
