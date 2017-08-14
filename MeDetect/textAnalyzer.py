@@ -61,30 +61,38 @@ def correctness(text):
 	return []
 
 def hebrewFeatures(text):
-	return []
+	pride = ["שיוויון","בחירה","הכבוד","חופש","גאווה","דת"
+	,"תורה","תועבה","סדום","עמורה","מחלה","סוטים","גאים",
+	"אנשים","יפים","טובים","מקסים","מקסימים","שוטרים","מחליא",
+	"צואה","נתניהו","תודה","מחמם","לב","ירושלים","חורבן","חרבה",
+	"עיוות","מעוות","תמיד","חוק","מצעד","בהמות","כיפה","עדינים","טובי",
+	"חסימת","חסימות","כבישים","אבדון","תמיכה","נורמלי","נורמלים","נורמליים",
+	"ערומים","ערום","עירום","נמוך","בהמי","קומץ","תקשורת",
+	"ביתמשפט","ביתהמשפט","השפלת","השפלה","נשים","נקבות","בנות",
+	"אחים","אחיות","אחי","אחיי","רפואה","טינופת","חילול","שבת","גאווה","מגעילות"]
+	return contentAnalysis(text,pride)
 
-def contentAnalysis(text):
-	s = [
+common = [
 	"חח","חחח","חחחח",
 	"אני","אתה","אנחנו","הוא","היא","הם","הן",
 	"אם","עם","נכון","כן","לא",
 	"כאילו","אבל","וגם",
 	]
 
+def contentAnalysis(text, s):
 	v = [0]*len(s)
 
 	for i in range(len(s)):
-		if text.find(s[i]) >= 0:
-			v[i] = 1
+		v[i] = text.count(s[i])
 
 	return v
 
 def create_feature_vector(text):
 	text = text.replace("@@",",")
 	v = metadata(text)
-	v += emojiAnalysis(text, False)
-	v += contentAnalysis(text)
-	v += correctness(text)
+	#v += emojiAnalysis(text, False)
+	#v += contentAnalysis(text)
+	#v += correctness(text)
 	v += hebrewFeatures(text)
 	return v
 
@@ -131,8 +139,9 @@ if __name__ == "__main__":
 	data = f.readlines()
 
 	for entry in data:
+
 		entry = entry.split(",")
 		v = create_feature_vector(entry[0])
-		v = add_polynomial_features(v,1)
+		v = add_polynomial_features(v,2)
 		print v
 		#break

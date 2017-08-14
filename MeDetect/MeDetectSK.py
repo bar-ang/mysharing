@@ -25,6 +25,8 @@ def loadData(filepath, cv_frac = 0.2, test_frac = 0.2, polynomial_degree = 2):
 	testSen = []
 	for entry in data:
 		entry = entry.split(",")
+		if len(entry) < 2 or entry[1].strip() == "?":
+			continue
 		v = textAnalyzer.create_feature_vector(entry[0])
 		v = textAnalyzer.add_polynomial_features(v,polynomial_degree)
 
@@ -63,7 +65,7 @@ def evaluateResults(lr, X_test, y_test):
 	return test_succ_precent
 
 THRESH = 0.5
-POLY_DEG = 2
+POLY_DEG = 3
 if __name__ == "__main__":
 	if len(sys.argv) > 1:
 		alldata = loadData(sys.argv[1],cv_frac = 0, test_frac = 0.2, polynomial_degree=POLY_DEG)
