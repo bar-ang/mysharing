@@ -17,11 +17,11 @@ count = int(sys.argv[3])
 
 URL = """https://www.google.co.il/search?q=%s&client=ubuntu&hs=ASH&channel=fs&source=lnms&tbm=isch&sa=X&ved=0ahUKEwjJt8OUmsvVAhVpDcAKHQkcCgQQ_AUICigB&biw=1403&bih=758"""
 
-print "start"
+
 
 r = requests.get(URL % search) 
 
-print "connected"
+
 doc = lxml.html.fromstring(r.content)
 c = 0
 for t in doc.xpath("""//div[@id="ires"]//img/@src"""):
@@ -31,4 +31,5 @@ for t in doc.xpath("""//div[@id="ires"]//img/@src"""):
 	f.write(pic)
 	c += 1
 	if c >= count:
+		print "stopped"
 		break
