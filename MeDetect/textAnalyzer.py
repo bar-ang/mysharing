@@ -3,6 +3,7 @@
 
 import sys
 import re
+import random
 
 EMOJI = ["👍","😪","😅","🤣","😀","😅","🤔","😜","✨","🌚",
 	"😅","😳","😶","🤔","🤣","😺","😗","😛",
@@ -36,7 +37,7 @@ def  metadata(text): #TODO: problems :(
 		if len(word) > maxlen:
 			maxlen = len(word)
 	v += [maxlen]
-	return v
+	return v,["length","lines","words","puncs"]
 
 def emojiAnalysis(text, detailed = True):
 	#No of real emoji
@@ -60,6 +61,16 @@ def emojiAnalysis(text, detailed = True):
 def correctness(text):
 	return []
 
+
+def contentAnalysis(text, s):
+	v = [0]*len(s)
+	u = []
+	for i in range(len(s)):
+		v[i] = text.count(s[i])
+		u.append(s[i])
+
+	return v,u
+
 def hebrewFeatures(text):
 	pride = ["שיוויון","בחירה","הכבוד","חופש","גאווה","דת"
 	,"תורה","תועבה","סדום","עמורה","מחלה","סוטים","גאים",
@@ -79,45 +90,18 @@ common = [
 	"כאילו","אבל","וגם",
 	]
 
-def contentAnalysis(text, s):
-	v = [0]*len(s)
-
-	for i in range(len(s)):
-		v[i] = text.count(s[i])
-
-	return v
 
 def create_feature_vector(text):
 	text = text.replace("@@",",")
-	v = metadata(text)
+	v,u = metadata(text)
 	#v += emojiAnalysis(text, False)
 	#v += contentAnalysis(text)
 	#v += correctness(text)
-	v += hebrewFeatures(text)
-	return v
+	v2,u2 = hebrewFeatures(text)
+	v += v2
+	u += u2
+	return v,u
 
-def add_polynomial_features(v, deg = 2):
-	if deg < 2:
-		return v
-
-	lastdeg = v
-	newdeg = []
-	polyv = []
-	for d in range(1,deg):
-		for unit in v:
-			for subset in lastdeg:
-				newdeg.append(unit*subset)
-		polyv += lastdeg
-		lastdeg = newdeg
-	polyv += lastdeg
-	return polyv
-
-def add_quadratic_features(v):
-	copy = v[:]
-	for f1 in copy:
-		for f2 in copy:
-			v.append(f1*f2)
-	return v
 
 def add_polynomial_features(v, deg=2):
 	if deg == 1:
@@ -136,7 +120,7 @@ if __name__ == "__main__":
 	else:
 		f = open("data.csv")
 
-	data = f.readlines()
+	data = random.suffle(f.readlines())
 
 	for entry in data:
 

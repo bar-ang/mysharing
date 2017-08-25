@@ -3,6 +3,7 @@ from numpy.matlib import *
 from sklearn.linear_model import LogisticRegression
 import textAnalyzer
 import sys
+import random
 
 def loadData(filepath, cv_frac = 0.2, test_frac = 0.2, polynomial_degree = 2):
 	X_train = []
@@ -16,6 +17,7 @@ def loadData(filepath, cv_frac = 0.2, test_frac = 0.2, polynomial_degree = 2):
 	f = open(filepath,'r')
 
 	data = f.readlines()
+	random.shuffle(data)
 
 	c = 0
 	cv_count  = int(len(data)*cv_frac)
@@ -27,7 +29,7 @@ def loadData(filepath, cv_frac = 0.2, test_frac = 0.2, polynomial_degree = 2):
 		entry = entry.split(",")
 		if len(entry) < 2 or entry[1].strip() == "?":
 			continue
-		v = textAnalyzer.create_feature_vector(entry[0])
+		v,u = textAnalyzer.create_feature_vector(entry[0])
 		v = textAnalyzer.add_polynomial_features(v,polynomial_degree)
 
 		if c < train_count:
@@ -51,26 +53,20 @@ def loadData(filepath, cv_frac = 0.2, test_frac = 0.2, polynomial_degree = 2):
 
 
 
-	return X_train,y_train, X_cv,y_cv, X_test,y_test
+	return X_train,y_train, X_cv,y_cv, X_test,y_test,u
 
 
 def evaluateResults(lr, X_test, y_test):
 	tests = X_test.shape[0]
-	successes = 0
-	for i in range(tests):
-		p = lr.predict(X_test[i])
-		if p[0] == y_test[i,0]:
-			successes+=1
-	test_succ_precent = successes*1.0/tests
-	return test_succ_precent
+	return lr.score(X_test,y_test)
 
 THRESH = 0.5
-POLY_DEG = 3
+POLY_DEG = 2
 if __name__ == "__main__":
 	if len(sys.argv) > 1:
-		alldata = loadData(sys.argv[1],cv_frac = 0, test_frac = 0.2, polynomial_degree=POLY_DEG)
+		alldata = loadData(sys.argv[1],cv_frac = 0, test_frac = 0.4, polynomial_degree=POLY_DEG)
 	else:
-		alldata = loadData("data.csv", cv_frac = 0, test_frac = 0.2, polynomial_degree=POLY_DEG)
+		alldata = loadData("data.csv", cv_frac = 0, test_frac = 0.4, polynomial_degree=POLY_DEG)
 	X_train = alldata[0]
 	X_cv = alldata[2]
 	X_test = alldata[4]
@@ -79,12 +75,19 @@ if __name__ == "__main__":
 	y_cv = alldata[3]
 	y_test = alldata[5]
 
-	lr = LogisticRegression()
+	u = alldata[6]
+
+	lr = LogisticRegression(C=5.0)
 	lr.fit(X_train,ravel(y_train))
 
 
-	train_succ_precent = evaluateResults(lr, X_train, y_train)*100
-	test_succ_precent = evaluateResults(lr, X_test, y_test)*100
-
-	print "training accuracy: %s%%." %round(train_succ_precent,3)
-	print "testing  accuracy: %s%%." %round(test_succ_precent,3)
+	train_succ_precent = evaluateResults(lr, X_train, y_train)
+	test_succ_precent = evaluateResults(lr, X_test, y_test)
+	c = 0
+	for f in np.nditer(lr.coef_):
+		if round(f*100,2) > 0.5:
+			print "%s: %s" % (u[c],round(f*100,2))
+		c += 1
+	sys.stdout.write("\n")
+	print "training accuracy: %s%%." %round(train_succ_precent*100,3)
+	print "testing  accuracy: %s%%." %round(test_succ_precent*100,3)
