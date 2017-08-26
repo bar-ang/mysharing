@@ -122,7 +122,6 @@ def filterer(packet):
 
 def main(argv):
 	#{1. IP to block}{2. page to send}{3. my mac}{4. gateway mac}{5. gateway ip}
-	print "script started"
 	global block_ip
 	global send_page
 	global gateway_ip
@@ -130,6 +129,14 @@ def main(argv):
 	global my_mac
 
 	global page_data
+
+	if len(argv) < 5 or "-help" in argv:
+		print "Usage:"
+		print "python NetBlock.py <IP to block> <Page to send> <My MAC> <Gateway MAC> <Gateway IP>"
+		print "*** It is recommended to use 'NetBlock_wrapper.py'"
+		sys.exit(1)
+
+	print "script started"
 
 	block_ip = argv[1].split(",")
 	send_page = argv[2]
