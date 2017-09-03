@@ -1,6 +1,8 @@
 #Completed on Mon, 20 Jul 2015, 13:18
 import sys
 from math import *
+import euler_tools as tools
+
 x = (3,7)
 N = 1000000
 
@@ -11,16 +13,6 @@ if len(sys.argv) > 1:
 if len(sys.argv) > 2:
 	N = int(sys.argv[2])
 
-
-def gcd(a, b):
-    """Calculate the Greatest Common Divisor of a and b.
-
-    Unless b==0, the result will have the same sign as b (so that when
-    b is divided by it, the result comes out positive).
-    """
-    while b:
-        a, b = b, a%b
-    return a
 
 def get_mid(d,x,y):
 	lam1 = ceil(d*x[0]*1.0/x[1])
@@ -35,7 +27,7 @@ def get_mid(d,x,y):
 		return None
 	else:
 		l = int(lam2)
-		m = gcd(l,d)
+		m = tools.gcd(l,d)
 		return (l/m,d/m)
 
 closest = (0,1)
