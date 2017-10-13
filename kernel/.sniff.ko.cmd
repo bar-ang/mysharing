@@ -1,1 +1,0 @@
-cmd_/home/bar/git/mysharing/kernel/sniff.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/bar/git/mysharing/kernel/sniff.ko /home/bar/git/mysharing/kernel/sniff.o /home/bar/git/mysharing/kernel/sniff.mod.o ;  true
