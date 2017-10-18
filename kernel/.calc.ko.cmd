@@ -1,0 +1,1 @@
+cmd_/home/bar/git/mysharing/kernel/calc.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/bar/git/mysharing/kernel/calc.ko /home/bar/git/mysharing/kernel/calc.o /home/bar/git/mysharing/kernel/calc.mod.o ;  true

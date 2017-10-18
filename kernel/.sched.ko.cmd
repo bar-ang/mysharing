@@ -1,0 +1,1 @@
+cmd_/home/bar/git/mysharing/kernel/sched.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/bar/git/mysharing/kernel/sched.ko /home/bar/git/mysharing/kernel/sched.o /home/bar/git/mysharing/kernel/sched.mod.o ;  true

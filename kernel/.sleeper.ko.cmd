@@ -1,0 +1,1 @@
+cmd_/home/bar/git/mysharing/kernel/sleeper.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/bar/git/mysharing/kernel/sleeper.ko /home/bar/git/mysharing/kernel/sleeper.o /home/bar/git/mysharing/kernel/sleeper.mod.o ;  true
