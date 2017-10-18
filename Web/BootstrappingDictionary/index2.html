@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bootstrapping Dictionary</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script language="JavaScript">
+        var app = angular.module("myApp", []);
+        //here we create a new HTML attribute
+        //every tag with the attribute 'strange-one' will activate this function
+        app.directive("strangeOne", function(){
+            return {
+                template : "HELLO!"
+            };
+        });
+    </script>
+</head>
+<body>
+    <!-- Define a new Angular App -->
+    <div ng-app="myApp" strange-one>
+
+    </div>
+</body>
+</html>

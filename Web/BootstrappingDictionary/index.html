@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bootstrapping Dictionary</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
+
+    <script language="JavaScript">
+        var app = angular.module("dictionary", []);
+        app.controller("myCtrl", function($scope, $http){
+            $http.get("tdb.txt").then(function(response){
+                $scope.entries = response.data;
+            }, function error(response){
+                $scope.error = "Error.";
+            });
+
+
+            $http.get("modify.php").then(function(response){
+                $scope.try = response.config;
+            }, function error(response){
+                $scope.error = "Error (in try).";
+            });
+        });
+    </script>
+
+
+
+</head>
+<body>
+
+
+    <div ng-app="dictionary" ng-controller="myCtrl">
+        {{ try }}
+       <table border="1">
+           <th></th>
+           <th>Word</th>
+           <th>Meaning</th>
+           <th>Translate</th>
+           <th>Engllish Equiv.</th>
+           <th></th>
+
+           <tr ng-repeat="entry in entries">
+               <td>{{ $index }}</td>
+               <td>{{ entry.word }}</td>
+               <td>{{ entry.mean }}</td>
+               <td>{{ entry.trans }}</td>
+               <td>{{ entry.eng }}</td>
+               <td><input type="button" ng-model="btnAdd" ng-click="edit" value="Edit" /></td>
+           </tr>
+           <tr>
+               <td></td>
+               <td><input type="text" ng-model="newWord" placeholder="Add a new word" /> </td>
+               <td><input type="text" ng-model="newMean" /></td>
+               <td><input type="text" ng-model="newTrans" /></td>
+               <td><input type="text" ng-model="newEng" /></td>
+               <td><input type="button" ng-model="btnAdd" ng-click="add" value="Add" /></td>
+           </tr>
+       </table>
+        <input type="file" name="file" id="filename">
+    </div>
+
+
+</body>
+</html>
