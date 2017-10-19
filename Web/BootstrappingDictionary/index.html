@@ -15,12 +15,40 @@
                 $scope.error = "Error.";
             });
 
+            $scope.addEntry = function($http){
 
-            $http.get("modify.php").then(function(response){
-                $scope.try = response.config;
-            }, function error(response){
-                $scope.error = "Error (in try).";
-            });
+              var ans = "no";
+
+              var query = "?";
+              query += "word=" + $scope.newWord;
+              query += "&mean=" + $scope.newMean;
+              query += "&trans=" + $scope.newTrans;
+              query += "&eng=" + $scope.newEng;
+              $http.get("proc.nf" + query).then(function(response){
+                ans = response.data;
+              }, function error(response){
+                $scope.error = "Error.";
+              });
+
+              if(ans != "OK"){
+                $scope.error = ans;
+                return;
+              }
+
+             $scope.entries.push({
+                "word":$scope.newWord,
+                "mean":$scope.newMean,
+                "trans":$scope.newTrans,
+                "eng":$scope.newEng
+              });
+
+               $scope.newWord="";
+               $scope.newMean="";
+               $scope.newTrans="";
+               $scope.newEng="";
+
+               $scope.error = "All Good";
+            }
         });
     </script>
 
@@ -31,7 +59,6 @@
 
 
     <div ng-app="dictionary" ng-controller="myCtrl">
-        {{ try }}
        <table border="1">
            <th></th>
            <th>Word</th>
@@ -54,12 +81,11 @@
                <td><input type="text" ng-model="newMean" /></td>
                <td><input type="text" ng-model="newTrans" /></td>
                <td><input type="text" ng-model="newEng" /></td>
-               <td><input type="button" ng-model="btnAdd" ng-click="add" value="Add" /></td>
+               <td><input type="button" ng-model="btnAdd" ng-click="addEntry()" value="Add" /></td>
            </tr>
        </table>
-        <input type="file" name="file" id="filename">
+      {{ error }}
     </div>
-
-
+    <img src="chinese.png" />
 </body>
 </html>
