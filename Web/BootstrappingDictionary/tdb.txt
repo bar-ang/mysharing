@@ -1,5 +1,0 @@
-[
-    {   "word" : "aveler",  "mean" : "#",   "trans" : "feel a deep romantic or sexual attachment to (someone).",    "eng" : "to love" },
-    {   "word" : "ambas",   "mean" : "#",   "trans" : "the earth, together with all of its countries, peoples, and natural features.",  "eng" : "world"    },
-    {   "word" : "kartikos","mean" : "#",   "trans" : "a paid position of regular employment.", "eng" : "job"    }
-]
