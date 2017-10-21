@@ -33,26 +33,31 @@ const server = http.createServer((req, res) => {
 	
 
 	switch(filename){
-		case "./freequery.nf":
-			var body = "";
-			  req.on('data', function (chunk) {
-			    body += chunk;
-			  });
-			  req.on('end', function () {
-			    console.log('client sent data: ' + body);
-			    var data = JSON.parse(JSON.parse(body));
-			    var sql = data.query;
-				vals = data.vals;
-				con.query(sql, [vals], function (err, result) {
-			    	if (err){
-			    		console.log("operation failed: " + err);
-			    		res.end("Bad");
-			    		return;
-			    	}
-		    		res.end(JSON.stringify(result));
-	  			});
-			  })
-			break
+		case "./translateword.nf":
+			var data = q.query;
+			sql = 	"SELECT pronoun, possesion, english, POS " + 
+					"FROM vocabulary, rules" +
+					"WHERE word=?";
+			var vals;
+
+			if(data.suff != "NULL"){
+				 sql += " AND suffix=?";
+				 vals = [data.word,data.suff];
+			}else{
+				vals = [data.word];
+			}
+
+			con.query(sql, vals, function (err, result, fields) {
+			    if (err) {
+			    	console.log("could not receive table: " + err);
+			    	return;
+			    }
+			 	res.end(JSON.stringify(result));
+			 	return;
+			});
+
+			res.end("Bad");
+			
 			break;
 		case "./addentry.nf":
 			 var body = "";
@@ -74,7 +79,7 @@ const server = http.createServer((req, res) => {
 		    		res.end("OK");
 	  			});
 			  })
-			break
+			break;
 
 		case "./gettable.nf":
 			console.log("Client wants data.");

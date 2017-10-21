@@ -92,7 +92,7 @@ mainApp.controller("myCtrl", function($scope, $http){
 			headers : {
 				'Content-Type' : 'application/json'
 			},
-			data: JSON.stringify(JSON.stringify($scope.entries[$index]))
+			data: JSON.stringify($scope.entries[$index])
 		};
 
 		$http(req).then(function(response){
@@ -118,23 +118,15 @@ mainApp.controller("myCtrl", function($scope, $http){
 sentenceApp.controller("sentCtrl", function($scope, $http){
 	$scope.MarkedText = function(){
 		var words = $scope.freeText.split(' ');
-        var marked = "";
+        var marked = ":)";
         for(i=0;i<words.length;i++){
-          stem = stem(words[i]);
-
-		hreq = {
-			method: 'POST',
-			url: "edittuple.nf",
-			headers : {
-				'Content-Type' : 'application/json'
-			},
-			data: JSON.stringify(JSON.stringify($scope.entries[$index]))
-		}
-
-          if(dictsearch($scope.entries,words[i]) || dictsearch($scope.entries,stem))
-            marked += "<span class='marked'>" + words[i] + "</span> ";
-          else
-            marked += words[i] + " ";
+        	stem = stem(words[i],["a","e","i","o","u","y"]);
+			$http.get("translateword.nf?word=" + stem.stem + "&suff=" + stem.suffix).then(function(response){
+	      	  	ans = response.data;
+	      	  	alert(JSON.stringify(ans));
+	      	}, function error(response){
+	       		$scope.error = "Error.";
+	      	});
         }
 
         return marked;

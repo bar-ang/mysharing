@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	 <meta charset="UTF-8">
 	<title>Write a Sentence!</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
@@ -14,9 +15,9 @@
 <body>
 	<h1>Write a Sentence!</h1>
 
-	<div ng-app="sentence" ng-controller="sentCtrl" ng-init="freeText='Ym amar ageles avelero katese'">
+	<div ng-app="sentence" ng-controller="sentCtrl" ng-init="freeText='katese'">
 	   <input type="text" ng-model="freeText"><br/>
-       <span ng-bind-html="markedText()"></span>
+       <span ng-bind-html="MarkedText()"></span>
 
       
       <div class="float hinter" id="hinter">
