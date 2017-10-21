@@ -3,67 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Bootstrapping Dictionary</title>
+
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular-sanitize.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
+
+    <link rel = "stylesheet" type="text/css" href="style.css" />
+
+    <script src="langLogic.js"></script>
     <script src="front.js"></script>
-    <style type="text/css">
-      body{
-        background-color: #ffffaa;
-        font-family: sans-serif;
-      }
-      h1{
-        color:  #00aa55;
-        text-decoration: underline;
-        font-weight: bold;
-        text-align: center;
-      }
-      table, th , td {
-        border: 1px solid grey;
-        border-collapse: collapse;
-        padding: 5px;
-      }
-      th{
-         background-color: #00aa55;
-         color: white;
-      }
-      table tr:nth-child(odd) {
-        background-color: #77ffaa;
-      }
-      table tr:nth-child(even) {
-        background-color: #77aaff;
-      }
-      span.marked {
-        font-weight: bold;
-        color: red;
-      }
-      div.float {
-        background-color: #9999ff;
-        display: inline-block;
-        padding: 12px;
-        border-style: solid;
-        border-width: 4px;
-        border-color:  #33ddff;
-        border-radius: 8px;
-        position: fixed;
-        top: 25%;
-        left: 35%;
-      }
-      div.hinter{
-        font-size: 9px;
-        padding: 6px;
-        border-radius: 4px;
-      }
-    </style>
-
-
-
 </head>
 <body>
     <h1>Bootstrapping Dictionary</h1>
-    <div ng-app="dictionary" ng-controller="myCtrl" ng-init="freeText='Ym amar ageles avelero katese'">
-      Filter: <input type="text" ng-change="applyFilter(filterMask)" ng-model="filterMask" />
-       <table>
+    <div ng-app="dictionary" ng-controller="myCtrl">
+      <form>
+        Filter: <input type="text" ng-change="applyFilter(filterMask, filerType)" ng-model="filterMask" /><br/>
+        <input type="radio" ng-model="filerType" value="startby">All that start by
+        <input type="radio" ng-model="filerType" value="regex">Filter by Regex
+      </form>
+       <table id="maintable">
            <th></th>
            <th>Word</th>
            <th>Synonym</th>
@@ -75,7 +33,12 @@
 
            <tr ng-repeat="entry in entries">
                <td>{{ $index + 1}}</td>
-               <td ng-repeat="field in entry">{{field}}</td>
+               <td ng-bind="entry.word"></td>
+               <td ng-bind="entry.synonym"></td>
+               <td ng-bind="entry.POS"></td>
+               <td ng-bind="entry.meaning"></td>
+               <td ng-bind="entry.translation"></td>
+               <td ng-bind="entry.english"></td>
                <td>
                 <input type="button" ng-click="edit($index)" value="Edit" />
               </td>
@@ -94,24 +57,6 @@
            </tr>
        </table>
        <br/>
-       <input type="text" ng-model="freeText" name="free"><br/>
-       <span  name="free" ng-bind-html="MarkedText()" class="{{freeText}}"></span>
-       <br/><br/><br/>
-
-      <div class="float" id="editSpace">
-        <form novalidate>
-               word: <input type="text" ng-model="entries[editing].word" placeholder="Add a new word" name="word" readonly /> </br>
-               POS: <input type="text" ng-model="entries[editing].POS" placeholder="Add a new word" name="word" /> </br>
-               meaning: <input type="text" ng-model="entries[editing].meaning" name="mean" /></br>
-               translation: <input type="text" ng-model="entries[editing].translation" name="trans" /></br>
-               english: <input type="text" ng-model="entries[editing].english" name="eng" /></br> 
-               <input type="submit" id="edit" value="Done" ng-click="doneEdit(editing)" />
-              <input type="submit" id="remove" value="remove" ng-click="removeEntry(editing)" />
-        </form>
-      </div>
-      <div class="float hinter" id="hinter">
-        hint
-      </div>
       {{ error }}
     </div>
 </body>

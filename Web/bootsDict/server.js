@@ -33,6 +33,27 @@ const server = http.createServer((req, res) => {
 	
 
 	switch(filename){
+		case "./freequery.nf":
+			var body = "";
+			  req.on('data', function (chunk) {
+			    body += chunk;
+			  });
+			  req.on('end', function () {
+			    console.log('client sent data: ' + body);
+			    var data = JSON.parse(JSON.parse(body));
+			    var sql = data.query;
+				vals = data.vals;
+				con.query(sql, [vals], function (err, result) {
+			    	if (err){
+			    		console.log("operation failed: " + err);
+			    		res.end("Bad");
+			    		return;
+			    	}
+		    		res.end(JSON.stringify(result));
+	  			});
+			  })
+			break
+			break;
 		case "./addentry.nf":
 			 var body = "";
 			  req.on('data', function (chunk) {
@@ -73,6 +94,22 @@ const server = http.createServer((req, res) => {
 			var data = q.query;
 			sql = "SELECT * FROM vocabulary WHERE word LIKE ? ORDER BY word";
 			val = data.filter + "%";
+			con.query(sql, val, function (err, result, fields) {
+			    if (err) {
+			    	console.log("could not receive table: " + err);
+			    	return;
+			    }
+			 	res.end(JSON.stringify(result));
+			});
+
+			break;
+
+		case "./filterregextable.nf":
+			console.log("Client wants filtered (by regex) data.");
+
+			var data = q.query;
+			sql = "SELECT * FROM vocabulary WHERE word REGEXP ? ORDER BY word";
+			val = "^" + data.filter + "$";
 			con.query(sql, val, function (err, result, fields) {
 			    if (err) {
 			    	console.log("could not receive table: " + err);
@@ -126,7 +163,10 @@ const server = http.createServer((req, res) => {
 		      		console.log(filename + ": file could not be sent.");
 		      		return res.end("404 Not Found");
 		    	}
-		    	res.writeHead(200, {'Content-Type': 'text/html'});
+		    	if(filename.substring(filename.indexOf(".",1)) != ".css")
+		    		res.writeHead(200, {'Content-Type': 'text/html'});
+		    	else
+		    		res.writeHead(200, {'Content-Type': 'text/css'});
 	    		res.end(data);
 	    		return;		
 			});

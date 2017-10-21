@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Write a Sentence!</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular-sanitize.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
+    <link rel = "stylesheet" type="text/css" href="style.css" />
+
+    <script src="langLogic.js"></script>
+    <script src="front.js"></script>
+</head>
+<body>
+	<h1>Write a Sentence!</h1>
+
+	<div ng-app="sentence" ng-controller="sentCtrl" ng-init="freeText='Ym amar ageles avelero katese'">
+	   <input type="text" ng-model="freeText"><br/>
+       <span ng-bind-html="markedText()"></span>
+
+      
+      <div class="float hinter" id="hinter">
+       	 hint
+      </div>
+  </div>
+</body>
+</html>
