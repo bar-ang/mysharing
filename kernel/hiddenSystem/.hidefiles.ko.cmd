@@ -1,0 +1,1 @@
+cmd_/home/bar/git/mysharing/kernel/hiddenSystem/hidefiles.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/bar/git/mysharing/kernel/hiddenSystem/hidefiles.ko /home/bar/git/mysharing/kernel/hiddenSystem/hidefiles.o /home/bar/git/mysharing/kernel/hiddenSystem/hidefiles.mod.o ;  true

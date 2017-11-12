@@ -49,21 +49,31 @@ class WordJibberish(object):
  		return " ".join(result[self.order:])
 
 
-if len(sys.argv) <= 1:
-	print "please choose a file for training."
+if len(sys.argv) <= 2:
+	print "please choose a files for training."
 	sys.exit()
 
 order = 2
-length = 100
-
-if len(sys.argv) > 2:
-	order = int(sys.argv[2])
-if len(sys.argv) > 3:
-	length = int(sys.argv[3])
+length = 10
+sentences = 50
 
 
-wj = WordJibberish(order)
-wj.loadFile(sys.argv[1])
-wj.train()
 
-print  wj.generate(length)
+rick = WordJibberish(order)
+morty = WordJibberish(order)
+
+rick.loadFile(sys.argv[1])
+morty.loadFile(sys.argv[2])
+
+rick.train()
+morty.train()
+
+alts = [rick, morty]
+if len(sys.argv) < 4:
+	alts_n = ['Rick', 'Morty']
+else:
+	alts_n = [sys.argv[3], sys.argv[4]]
+
+for i in range(sentences):
+	v = i % len(alts)
+	print "%s:\t\"%s\"" % (alts_n[v], alts[v].generate(length))
