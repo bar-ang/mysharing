@@ -1,5 +1,6 @@
 import sys
 import re
+import os
 
 def loadFile(filename):
 	return open(filename, 'r').read().lower()
@@ -33,5 +34,9 @@ text = loadFile(sys.argv[1])
 
 chars = extractCharacters(text)
 
+
+if not os.path.exists("characters"):
+    os.makedirs("characters")
+
 for char in chars:
-	saveCharacter(sys.argv[1] + "." + char + ".txt", chars[char])
+	saveCharacter("characters/" + char + ".dubdub", chars[char])

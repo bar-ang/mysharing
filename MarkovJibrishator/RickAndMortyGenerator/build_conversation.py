@@ -8,14 +8,18 @@ class WordJibberish(object):
  		self.text = None
  		self.order = order
  		self.graph = {}
+ 		self.terminator = '@'
 
- 	def cleanText(self):
+ 	def cleanText(self, ignoreTerminator = False):
  		text = self.text.lower()
  		regex = re.compile(r'[^a-zA-Z0-9\s]')
  		doublewhite = re.compile(r'\s\s+')
  		newline = re.compile(r'\n')
 		res = regex.sub('', text)
-		res = newline.sub(' ', res)
+		if not ignoreTerminator:
+			res = newline.sub(" %s " % self.terminator, res)
+		else:
+			res = newline.sub(' ', res)
 		res = doublewhite.sub(r' ', res)
 		self.text = res
 
@@ -45,6 +49,8 @@ class WordJibberish(object):
  			state = result[len(result) - self.order:]
  			if state in self.graph:
  				next_word = random.choice(self.graph[state])
+ 				if next_word == self.terminator:
+ 					break
  				result += (next_word,)
  		return " ".join(result[self.order:])
 
@@ -53,8 +59,8 @@ if len(sys.argv) <= 2:
 	print "please choose a files for training."
 	sys.exit()
 
-order = 2
-length = 10
+order = 1
+length = 100
 sentences = 50
 
 
